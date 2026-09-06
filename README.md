@@ -32,6 +32,8 @@
 
 Tiny app. Finds Creative Cloud’s livetype cache, names the real OpenType, and either drops a folder on your Desktop or zips it. Source cache stays read-only.
 
+**Download (Mac, Apple Silicon):** [FONarch_0.9.0_aarch64.dmg](https://github.com/mickjayofficial/FONarch/releases/download/v0.9.0-mac/FONarch_0.9.0_aarch64.dmg) — signed and notarized. Open the disk image, drag FONarch to Applications.
+
 Windows is next. This is not 1.0 until Mac **and** Windows both have a download. Intel Macs are not in this DMG.
 
 ```text
@@ -54,9 +56,9 @@ It is not a pirate tool. Do not redistribute Adobe’s fonts.
   --[ INSTALL ]---------------------------------
 ```
 
-1. Get `FONarch_0.9.0_aarch64.dmg` from [Releases](https://github.com/mickjayofficial/FONarch/releases).
+1. Download the `.dmg` (link at the top, or [Releases](https://github.com/mickjayofficial/FONarch/releases/latest)).
 2. Drag **FONarch** onto **Applications**.
-3. Open. Signed and notarized. macOS may once say it came from the internet — that’s normal.
+3. Open. macOS may once say it came from the internet — that’s normal.
 
 ```text
   --[ KEYS ]------------------------------------
@@ -86,7 +88,9 @@ Tentative: [docs/ROADMAP.md](docs/ROADMAP.md). 0.9.0 Mac → Windows `.exe` → 
   --[ HACK ]------------------------------------
 ```
 
-Node 22 + rustc. `npm install && npm run tauri -- dev`  
+`ui/` is the window. `assets/` is fonts and the crown. Node 22 + rustc.
+
+`npm install && npm run tauri -- dev`  
 Headless: `cargo run -p fonarch-core --bin gather`
 
 ```text
