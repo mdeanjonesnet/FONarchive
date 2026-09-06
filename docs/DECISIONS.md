@@ -16,7 +16,7 @@ Apache 2.0, not affiliated with Adobe. Personal backup of fonts already on disk 
 ## Name
 
 - Display / wordmark: **FONarch** (FON lockup + arch, spoken like *monarch*)
-- Repo rename `FONarchive` → `FONarch` waits until UI is locked
+- GitHub repo: `mickjayofficial/FONarch` (renamed from `FONarchive` 2026-09-05). Old URLs redirect.
 - `fonarch.com` is a Namecheap squat (Jul 2026, WHOIS never verified). `.app` / `.dev` / `.io` looked free as of 2026-09-01
 - Future “FontBase on steroids” AI manager is a **separate** product and repo
 

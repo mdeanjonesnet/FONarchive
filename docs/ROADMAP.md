@@ -16,7 +16,7 @@ Do not block the Mac GitHub drop on Windows.
 
 ## 1.0
 
-Mac (Apple Silicon; Intel if we add a build) **and** Windows both on Releases. Repo rename `FONarchive` → `FONarch` when Michael says so. Optional drag-to-Applications polish is already in the 0.9 DMG.
+Mac (Apple Silicon; Intel if we add a build) **and** Windows both on Releases. GitHub is `mickjayofficial/FONarch`. Optional drag-to-Applications polish is already in the 0.9 DMG.
 
 ## Later (v2-shaped, not 0.9)
 

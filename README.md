@@ -54,7 +54,7 @@ It is not a pirate tool. Do not redistribute Adobe’s fonts.
   --[ INSTALL ]---------------------------------
 ```
 
-1. Get `FONarch_0.9.0_aarch64.dmg` from [Releases](https://github.com/mickjayofficial/FONarchive/releases) (once 0.9 is up).
+1. Get `FONarch_0.9.0_aarch64.dmg` from [Releases](https://github.com/mickjayofficial/FONarch/releases).
 2. Drag **FONarch** onto **Applications**.
 3. Open. Signed and notarized. macOS may once say it came from the internet — that’s normal.
 
@@ -80,7 +80,7 @@ Won’t write livetype. Won’t decrypt `.e` blobs. Won’t scan other users. Wo
   --[ MAP ]-------------------------------------
 ```
 
-Tentative: [docs/ROADMAP.md](docs/ROADMAP.md). 0.9.0 Mac → Windows `.exe` → 1.0. Later: crown-on-the-window, donate / accent, bug reports. Python freeze is tag [`python-v1`](https://github.com/mickjayofficial/FONarchive/releases/tag/python-v1) (MIT). This rewrite is Apache 2.0. GitHub is still named `FONarchive` until the storefront rename.
+Tentative: [docs/ROADMAP.md](docs/ROADMAP.md). 0.9.0 Mac → Windows `.exe` → 1.0. Later: crown-on-the-window, donate / accent, bug reports. Python freeze is tag [`python-v1`](https://github.com/mickjayofficial/FONarch/releases/tag/python-v1) (MIT). This rewrite is Apache 2.0.
 
 ```text
   --[ HACK ]------------------------------------
