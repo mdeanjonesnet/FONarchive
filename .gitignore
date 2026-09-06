@@ -1,0 +1,22 @@
+# Local art-direction reference. The vis is GLSL, not this clip.
+assets/video/*.mov
+assets/video/*.mp4
+assets/video/*.webm
+
+.DS_Store
+**/*.af~lock~
+
+/target
+**/*.rs.bk
+.idea/
+.vscode/
+
+node_modules
+dist
+src-tauri/gen
+
+.env.notarize
+*.p12
+build DMG archive/
+
+*.dmg

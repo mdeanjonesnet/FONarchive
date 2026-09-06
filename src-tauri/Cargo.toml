@@ -1,0 +1,22 @@
+[package]
+name = "fonarch"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "FONarch — gather Adobe livetype fonts"
+
+[lib]
+name = "fonarch_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+dirs = "6"
+fonarch-core = { path = "../crates/fonarch-core" }
+open = "5"
+serde = { version = "1", features = ["derive"] }
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>FONarch vis — GLSL look-dev</title>
+  <style>
+    @font-face {
+      font-family: "Pet Me 64";
+      src: url("../assets/fonts/PetMe64.ttf") format("truetype");
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Pet Me";
+      src: url("../assets/fonts/PetMe.ttf") format("truetype");
+      font-display: block;
+    }
+    :root {
+      --accent: #ff9a1a;
+      --bg: #000;
+    }
+    html, body {
+      margin: 0;
+      background: #111;
+      color: var(--accent);
+      font-family: "Pet Me", monospace;
+      font-size: 14px;
+    }
+    h1 {
+      font-family: "Pet Me 64", monospace;
+      font-size: 18px;
+      font-weight: normal;
+      margin: 0;
+      letter-spacing: 0.04em;
+    }
+    .wrap {
+      max-width: 920px;
+      margin: 24px auto;
+      padding: 0 16px 40px;
+    }
+    .chrome {
+      background: var(--accent);
+      color: #000;
+      font-family: "Pet Me 64", monospace;
+      font-size: 16px;
+      text-align: center;
+      padding: 8px 12px;
+      position: relative;
+    }
+    .panel {
+      border: 6px solid var(--accent);
+      border-top: 0;
+      background: #000;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #000;
+    }
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 16px;
+    }
+    button {
+      font-family: "Pet Me 64", monospace;
+      font-size: 13px;
+      background: var(--accent);
+      color: #000;
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    button[aria-pressed="true"] {
+      outline: 3px solid #fff;
+      outline-offset: 2px;
+    }
+    .swatch {
+      width: 28px;
+      height: 28px;
+      border: 2px solid #fff;
+      cursor: pointer;
+      padding: 0;
+      border-radius: 4px;
+    }
+    p { line-height: 1.5; max-width: 62ch; }
+    .note { color: #bbb; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>FONarch vis</h1>
+    <p class="note">Full-width undulating range (no canyon). Locked camera, heightfield moves in place. Tint from --accent.</p>
+    <div class="chrome">FONarch</div>
+    <div class="panel">
+      <canvas id="vis" width="800" height="520"></canvas>
+    </div>
+    <div class="row">
+      <button type="button" id="idle" aria-pressed="true">IDLE</button>
+      <button type="button" id="run" aria-pressed="false">RUNNING</button>
+      <button type="button" class="swatch" data-accent="#ff9a1a" style="background:#ff9a1a" title="amber"></button>
+      <button type="button" class="swatch" data-accent="#39ff14" style="background:#39ff14" title="green"></button>
+      <button type="button" class="swatch" data-accent="#3ad0ff" style="background:#3ad0ff" title="cyan"></button>
+    </div>
+  </div>
+  <script>
+    const canvas = document.getElementById("vis");
+    const gl = canvas.getContext("webgl2", {
+      antialias: true,
+      alpha: false,
+      preserveDrawingBuffer: true,
+    });
+    if (!gl) {
+      document.body.append("WebGL2 required.");
+      throw new Error("WebGL2");
+    }
+    window.addEventListener("error", (e) => {
+      document.querySelector(".note").textContent = String(e.error || e.message);
+    });
+
+    const VS = `#version 300 es
+    in vec2 aXZ;
+    in vec2 aUV;
+    uniform mat4 uMVP;
+    uniform float uTime;
+    uniform float uSpeed;
+    out vec2 vUV;
+    out vec3 vWorld;
+    out vec3 vNrm;
+    out float vZ;
+
+    float height(vec2 p, float t) {
+      float x = p.x;
+      float z = p.y;
+      float wx = x + 0.65 * sin(z * 0.29 + t * 0.11);
+      float wz = z + 0.45 * sin(x * 0.25 - t * 0.08);
+      float n = 0.0;
+      n += 0.95 * abs(sin(wx * 0.37 + t * 0.26)) * abs(cos(wz * 0.21 + 1.1));
+      n += 0.72 * abs(sin(wx * 0.71 - t * 0.17 + 2.4)) * abs(cos(wz * 0.44 + t * 0.13));
+      n += 0.40 * abs(sin(wx * 1.48 + wz * 0.78 + t * 0.33));
+      n += 0.34 * abs(sin(wx * 0.18 + 0.9) * cos(wz * 0.13 + 2.2));
+      n += 0.42 * abs(sin(wx * 0.53 + 1.7 + t * 0.09));
+      n += 0.20 * sin(wx * 2.20 - wz * 1.35 + t * 0.22);
+      n = pow(max(n, 0.0), 1.20);
+      float base = 0.45 + 0.40 * sin(x * 0.15 + 0.5) + 0.28 * sin(x * 0.07 - 1.3);
+      float near = smoothstep(0.4, 10.0, z);
+      float roll = 0.10 * sin(x * 1.55 + t * 0.52) * sin(z * 1.18 + t * 0.40);
+      return mix(0.22 + roll, n * 1.85 + base, near);
+    }
+
+    void main() {
+      float t = uTime * uSpeed;
+      vec2 p = aXZ;
+      float hs = 0.22;
+      float h  = height(p, t);
+      float hL = height(p + vec2(-hs, 0.0), t);
+      float hR = height(p + vec2( hs, 0.0), t);
+      float hD = height(p + vec2(0.0, -hs), t);
+      float hU = height(p + vec2(0.0,  hs), t);
+      vec3 nrm = normalize(vec3(hL - hR, 2.0 * hs, hD - hU));
+      vec3 world = vec3(p.x, h, p.y);
+      vWorld = world;
+      vNrm = nrm;
+      vUV = aUV;
+      vZ = p.y;
+      gl_Position = uMVP * vec4(world, 1.0);
+    }`;
+
+    const FS = `#version 300 es
+    precision highp float;
+    in vec2 vUV;
+    in vec3 vWorld;
+    in vec3 vNrm;
+    in float vZ;
+    uniform vec3 uAccent;
+    uniform vec3 uCam;
+    out vec4 fragColor;
+
+    void main() {
+      float e = min(min(vUV.x, vUV.y), min(1.0 - vUV.x, 1.0 - vUV.y));
+      float fw = fwidth(e);
+      float line = 1.0 - smoothstep(fw * 0.35, fw * 1.25, e);
+
+      float ndl = clamp(dot(normalize(vNrm), normalize(vec3(0.35, 1.0, 0.4))), 0.0, 1.0);
+      vec3 fill = uAccent * (0.02 + 0.08 * ndl);
+
+      float dist = length(vWorld - uCam);
+      float fog = smoothstep(12.0, 40.0, dist);
+
+      vec3 col = mix(fill, uAccent, line);
+      col = mix(col, vec3(0.0), fog);
+      col += uAccent * fog * 0.06;
+      col += uAccent * line * (1.0 - fog) * 0.12;
+
+      fragColor = vec4(col, 1.0);
+    }`;
+
+    function compile(type, src) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        throw new Error(gl.getShaderInfoLog(s));
+      }
+      return s;
+    }
+
+    const prog = gl.createProgram();
+    gl.attachShader(prog, compile(gl.VERTEX_SHADER, VS));
+    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FS));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      throw new Error(gl.getProgramInfoLog(prog));
+    }
+    gl.useProgram(prog);
+    const vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+
+    const COLS = 52;
+    const ROWS = 40;
+    const X0 = -14.0, X1 = 14.0;
+    const Z0 = 0.4, Z1 = 44.0;
+    const quads = COLS * ROWS;
+    const verts = quads * 6;
+    const xz = new Float32Array(verts * 2);
+    const uv = new Float32Array(verts * 2);
+
+    let w = 0;
+    function emit(x, z, u, v) {
+      xz[w * 2] = x;
+      xz[w * 2 + 1] = z;
+      uv[w * 2] = u;
+      uv[w * 2 + 1] = v;
+      w++;
+    }
+    for (let j = 0; j < ROWS; j++) {
+      const z0 = Z0 + (Z1 - Z0) * (j / ROWS);
+      const z1 = Z0 + (Z1 - Z0) * ((j + 1) / ROWS);
+      for (let i = 0; i < COLS; i++) {
+        const x0 = X0 + (X1 - X0) * (i / COLS);
+        const x1 = X0 + (X1 - X0) * ((i + 1) / COLS);
+        emit(x0, z0, 0, 0);
+        emit(x1, z0, 1, 0);
+        emit(x0, z1, 0, 1);
+        emit(x1, z0, 1, 0);
+        emit(x1, z1, 1, 1);
+        emit(x0, z1, 0, 1);
+      }
+    }
+
+    function buf(data, loc, size) {
+      const b = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, b);
+      gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 0, 0);
+    }
+    buf(xz, gl.getAttribLocation(prog, "aXZ"), 2);
+    buf(uv, gl.getAttribLocation(prog, "aUV"), 2);
+
+    const uMVP = gl.getUniformLocation(prog, "uMVP");
+    const uTime = gl.getUniformLocation(prog, "uTime");
+    const uSpeed = gl.getUniformLocation(prog, "uSpeed");
+    const uAccent = gl.getUniformLocation(prog, "uAccent");
+    const uCam = gl.getUniformLocation(prog, "uCam");
+
+    function mul(a, b) {
+      const o = new Float32Array(16);
+      for (let c = 0; c < 4; c++) {
+        for (let r = 0; r < 4; r++) {
+          o[c * 4 + r] =
+            a[0 * 4 + r] * b[c * 4 + 0] +
+            a[1 * 4 + r] * b[c * 4 + 1] +
+            a[2 * 4 + r] * b[c * 4 + 2] +
+            a[3 * 4 + r] * b[c * 4 + 3];
+        }
+      }
+      return o;
+    }
+    function perspective(fovy, aspect, near, far) {
+      const f = 1 / Math.tan(fovy / 2);
+      const m = new Float32Array(16);
+      m[0] = f / aspect;
+      m[5] = f;
+      m[10] = (far + near) / (near - far);
+      m[11] = -1;
+      m[14] = (2 * far * near) / (near - far);
+      return m;
+    }
+    function lookAt(eye, target, up) {
+      const z = norm(sub(eye, target));
+      const x = norm(cross(up, z));
+      const y = cross(z, x);
+      const m = new Float32Array(16);
+      m[0] = x[0]; m[1] = y[0]; m[2] = z[0];
+      m[4] = x[1]; m[5] = y[1]; m[6] = z[1];
+      m[8] = x[2]; m[9] = y[2]; m[10] = z[2];
+      m[12] = -dot(x, eye); m[13] = -dot(y, eye); m[14] = -dot(z, eye);
+      m[15] = 1;
+      return m;
+    }
+    function sub(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
+    function dot(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+    function cross(a, b) {
+      return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+    }
+    function norm(v) {
+      const l = Math.hypot(v[0], v[1], v[2]) || 1;
+      return [v[0] / l, v[1] / l, v[2] / l];
+    }
+    function hexToRgb(hex) {
+      const n = parseInt(hex.slice(1), 16);
+      return [(n >> 16) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
+    }
+
+    const eye = [0.35, 2.55, -1.5];
+    const target = [0.1, 1.45, 18.0];
+    let speed = 0.70;
+    let accent = hexToRgb("#ff9a1a");
+
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+    gl.clearColor(0, 0, 0, 1);
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const wCss = canvas.clientWidth || 800;
+      const hCss = Math.round(wCss * 520 / 800);
+      canvas.style.height = hCss + "px";
+      canvas.width = Math.round(wCss * dpr);
+      canvas.height = Math.round(hCss * dpr);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    const t0 = performance.now();
+    function frame(now) {
+      const t = (now - t0) / 1000;
+      const aspect = canvas.width / canvas.height;
+      const mvp = mul(
+        perspective((50 * Math.PI) / 180, aspect, 0.25, 70),
+        lookAt(eye, target, [0, 1, 0])
+      );
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.uniformMatrix4fv(uMVP, false, mvp);
+      gl.uniform1f(uTime, t);
+      gl.uniform1f(uSpeed, speed);
+      gl.uniform3fv(uAccent, accent);
+      gl.uniform3fv(uCam, eye);
+      gl.drawArrays(gl.TRIANGLES, 0, verts);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    const idleBtn = document.getElementById("idle");
+    const runBtn = document.getElementById("run");
+    idleBtn.onclick = () => {
+      speed = 0.70;
+      idleBtn.setAttribute("aria-pressed", "true");
+      runBtn.setAttribute("aria-pressed", "false");
+    };
+    runBtn.onclick = () => {
+      speed = 2.30;
+      idleBtn.setAttribute("aria-pressed", "false");
+      runBtn.setAttribute("aria-pressed", "true");
+    };
+    document.querySelectorAll(".swatch").forEach((btn) => {
+      btn.onclick = () => {
+        const hex = btn.dataset.accent;
+        document.documentElement.style.setProperty("--accent", hex);
+        accent = hexToRgb(hex);
+      };
+    });
+  </script>
+</body>
+</html>

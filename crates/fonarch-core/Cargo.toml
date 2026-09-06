@@ -1,0 +1,24 @@
+[package]
+name = "fonarch-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Find, name, and copy Adobe Creative Cloud livetype fonts"
+
+[[bin]]
+name = "gather"
+path = "src/bin/gather.rs"
+
+[dependencies]
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+clap = { version = "4", features = ["derive"] }
+dirs = "6"
+roxmltree = "0.20"
+thiserror = "2"
+ttf-parser = "0.25"
+walkdir = "2"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+
+[dev-dependencies]
+tempfile = "3"

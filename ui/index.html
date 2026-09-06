@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=512, height=384" />
+    <title>FONarch</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-theme="amber">
+    <div class="app">
+      <header class="titlebar" data-tauri-drag-region>
+        <button type="button" id="gear" class="icon-btn" title="Settings" aria-label="Settings" aria-expanded="false">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="6" y="0" width="4" height="16" fill="currentColor" />
+            <rect x="0" y="6" width="16" height="4" fill="currentColor" />
+            <rect x="2" y="2" width="4" height="4" fill="currentColor" />
+            <rect x="10" y="2" width="4" height="4" fill="currentColor" />
+            <rect x="2" y="10" width="4" height="4" fill="currentColor" />
+            <rect x="10" y="10" width="4" height="4" fill="currentColor" />
+            <rect x="5" y="5" width="6" height="6" fill="var(--accent)" />
+            <rect x="6" y="6" width="4" height="4" fill="currentColor" />
+          </svg>
+        </button>
+        <h1 data-tauri-drag-region>FONarch</h1>
+        <div class="win">
+          <button type="button" id="min" class="icon-btn" title="Minimize" aria-label="Minimize">v</button>
+          <button type="button" id="close" class="icon-btn" title="Close" aria-label="Close">X</button>
+        </div>
+      </header>
+
+      <div class="frame">
+        <div class="stage">
+          <canvas id="vis" width="248" height="240"></canvas>
+          <div class="rule" aria-hidden="true"></div>
+          <div class="side">
+            <div id="list" class="list"></div>
+            <div id="led" class="led" aria-hidden="true"></div>
+          </div>
+        </div>
+        <p id="status" class="status">Ready...</p>
+        <div class="actions">
+          <button type="button" id="gather">GATHER</button>
+          <button type="button" id="archive">ARCHIVE</button>
+        </div>
+      </div>
+
+      <div id="menu" class="menu" hidden>
+        <p class="menu-title">SETTINGS</p>
+        <div class="menu-body">
+        <section class="menu-section menu-theme">
+          <p class="menu-label">THEME</p>
+          <div class="theme-grid">
+            <button type="button" class="theme-btn" data-theme="amber">AMBER<br />TERMINAL</button>
+            <button type="button" class="theme-btn" data-theme="green">GREEN<br />TERMINAL</button>
+            <button type="button" class="theme-btn" data-theme="mono">MONO<br />CHROME</button>
+            <button type="button" class="theme-btn" data-theme="c64">COMMODORE<br />64</button>
+          </div>
+        </section>
+        <section class="menu-section menu-save">
+          <p class="menu-label">SAVE LOCATION</p>
+          <p id="dest-label" class="menu-path">Desktop</p>
+          <div class="menu-row">
+            <button type="button" id="browse">BROWSE</button>
+            <button type="button" id="reset-dest">DESKTOP</button>
+          </div>
+        </section>
+        <section class="menu-section menu-about">
+          <p class="menu-label">ABOUT</p>
+          <div class="about-brand">
+            <svg class="about-mark" viewBox="0 0 1024 1024" aria-hidden="true">
+              <g
+                transform="matrix(9.756098,0,0,9.756098,-317.268293,94.173067)"
+                fill="currentColor"
+                fill-rule="evenodd"
+              >
+                <path
+                  d="M52,77.045L52,65.045L54,65.045L54,62.045L56,62.045L56,59.045L58,59.045L58,56.045L60,56.045L60,54.045L62,54.045L62,50.045L64,50.045L64,45.045L65,45.045L65,42.045L67,42.045L67,28.045L70,28.045L70,24.045L72,24.045L72,21.045L74,21.045L74,17.045L77,17.045L77,15.045L79,15.045L79,11.045L81,11.045L81,9.045L84,9.045L84,5.045L87,5.045L87,8.045L89,8.045L89,10.045L91,10.045L91,14.045L93,14.045L93,16.045L96,16.045L96,21.045L98,21.045L98,24.045L101,24.045L101,28.045L109,28.045L109,25.045L113,25.045L113,23.045L117,23.045L117,20.045L121,20.045L121,18.045L126,18.045L126,25.045L124,25.045L124,36.045L121,36.045L121,42.045L107,42.045L107,40.045L100,40.045L100,38.045L97,38.045L97,36.045L94,36.045L94,34.045L89,34.045L89,32.045L82,32.045L82,36.045L80,36.045L80,43.045L82,43.045L82,41.045L89,41.045L89,43.045L94,43.045L94,45.045L98,45.045L98,47.045L101,47.045L101,49.045L108,49.045L108,51.045L118,51.045L118,69.045L116,69.045L116,73.045L110,73.045L110,75.045L101,75.045L101,77.045L86,77.045L86,82.045L68,82.045L68,79.045L54,79.045L54,77.045L52,77.045ZM76,59.045L76,64.045L74,64.045L74,67.045L70,67.045L70,69.045L66,69.045L66,71.045L61,71.045L61,73.045L56,73.045L56,77.045L69,77.045L69,79.045L84,79.045L84,77.045L85,77.045L85,75.045L100,75.045L100,72.045L108,72.045L108,70.045L114,70.045L114,68.045L115,68.045L115,65.045L107,65.045L107,63.045L100,63.045L100,61.045L96,61.045L96,59.045L92,59.045L92,57.045L87,57.045L87,55.045L78,55.045L78,59.045L76,59.045ZM52,60L52,46L49,46L49,35L47,35L47,24L44,24L44,18L49,18L49,21L53,21L53,23L57,23L57,26L61,26L61,28L64,28L64,37L62,37L62,45L60,45L60,49L58,49L58,54L55,54L55,58L53,58L53,60L52,60Z"
+                />
+              </g>
+            </svg>
+            <p class="about-name">FONarch</p>
+          </div>
+          <p class="menu-note">
+            VERSION 0.9.0 by <a class="ext" href="https://mdeanjones.net/">Mick Jay</a>
+          </p>
+          <p class="menu-note">
+            Licensed under
+            <a class="ext" href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>
+          </p>
+          <p class="menu-note">NOT affiliated with Adobe.</p>
+          <p class="menu-note">
+            FONT: Pet Me by<br /><a class="ext" href="https://www.kreativekorp.com/">Kreative Software</a>
+          </p>
+        </section>
+      </div>
+      <button type="button" id="quit">QUIT</button>
+      </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,449 @@
+@font-face {
+  font-family: "Pet Me 64";
+  src: url("../assets/fonts/PetMe64.ttf") format("truetype");
+  font-display: block;
+}
+@font-face {
+  font-family: "Pet Me";
+  src: url("../assets/fonts/PetMe.ttf") format("truetype");
+  font-display: block;
+}
+
+:root,
+[data-theme="amber"] {
+  --accent: #ffb000;
+  --bg: #000;
+}
+[data-theme="green"] {
+  --accent: #33ff00;
+  --bg: #000;
+}
+[data-theme="mono"] {
+  --accent: #ffffff;
+  --bg: #000;
+}
+[data-theme="c64"] {
+  --accent: #7869c4;
+  --bg: #40318d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 512px;
+  height: 384px;
+  overflow: hidden;
+  background: var(--accent);
+  color: var(--accent);
+  font-family: "Pet Me", monospace;
+  font-size: 8px;
+  line-height: 16px;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  image-rendering: pixelated;
+  user-select: none;
+  cursor: default;
+}
+
+.app {
+  position: relative;
+  width: 512px;
+  height: 384px;
+  display: flex;
+  flex-direction: column;
+  background: var(--accent);
+}
+
+.titlebar {
+  height: 24px;
+  display: grid;
+  grid-template-columns: 40px 1fr 56px;
+  align-items: center;
+  color: #000;
+  flex: none;
+}
+
+.titlebar h1 {
+  margin: 0;
+  font-family: "Pet Me 64", monospace;
+  font-size: 16px;
+  font-weight: normal;
+  text-align: center;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+.icon-btn {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: #000;
+  font-family: "Pet Me 64", monospace;
+  font-size: 8px;
+  line-height: 8px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#gear {
+  margin-left: 8px;
+}
+
+#gear svg {
+  width: 10px;
+  height: 10px;
+  display: block;
+}
+
+.icon-btn:hover,
+.icon-btn:focus-visible {
+  outline: 1px solid #000;
+  outline-offset: 0;
+}
+
+.win {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0;
+  padding-right: 8px;
+}
+
+.frame {
+  flex: 1;
+  margin: 0 4px 4px;
+  background: var(--bg);
+  border: 4px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.stage {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 4px 1fr;
+  min-height: 0;
+}
+
+#vis {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  image-rendering: auto;
+}
+
+.rule {
+  background: var(--accent);
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 4px 4px 0 8px;
+}
+
+.list {
+  flex: 1;
+  overflow: hidden;
+  font-family: "Pet Me", monospace;
+  font-size: 8px;
+  line-height: 16px;
+  color: var(--accent);
+  min-height: 0;
+  padding-bottom: 16px;
+}
+
+.list .row {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.list .row.end {
+  margin-top: 8px;
+}
+
+.led {
+  display: flex;
+  gap: 2px;
+  height: 12px;
+  margin: 0 0 4px;
+  flex: none;
+}
+
+.led i {
+  flex: 1;
+  display: block;
+  height: 12px;
+  background: color-mix(in srgb, var(--accent) 22%, var(--bg));
+}
+
+.led i.on {
+  background: var(--accent);
+}
+
+.status {
+  margin: 0;
+  padding: 4px 8px;
+  font-family: "Pet Me", monospace;
+  font-size: 8px;
+  line-height: 16px;
+  color: var(--accent);
+  border-top: 4px solid var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 8px;
+  flex: none;
+}
+
+.actions button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #000;
+  font-family: "Pet Me 64", monospace;
+  font-size: 8px;
+  line-height: 8px;
+  padding: 8px 4px;
+  cursor: pointer;
+}
+
+.actions button:hover,
+.actions button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 1px;
+}
+
+.actions button:disabled {
+  opacity: 0.45;
+  cursor: default;
+  outline: none;
+}
+
+.menu {
+  position: absolute;
+  top: 24px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--accent);
+  border: 4px solid var(--accent);
+  padding: 8px;
+  z-index: 5;
+}
+
+.menu[hidden] {
+  display: none;
+}
+
+.menu-title {
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--accent);
+  font-family: "Pet Me 64", monospace;
+  font-size: 8px;
+  line-height: 16px;
+  text-align: center;
+  color: var(--accent);
+  flex: none;
+}
+
+.menu-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 8px;
+}
+
+.menu-section {
+  border: 1px solid var(--accent);
+  padding: 6px;
+  min-width: 0;
+}
+
+.menu-theme {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.menu-save {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.menu-about {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.menu-label,
+.menu-note,
+.menu-path {
+  margin: 0 0 4px;
+  font-family: "Pet Me", monospace;
+  font-size: 8px;
+  line-height: 16px;
+}
+
+.menu-path {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  margin-bottom: 6px;
+  opacity: 0.9;
+}
+
+.menu-note {
+  color: var(--accent);
+  opacity: 0.85;
+  margin: 0;
+}
+
+.menu-note .ext {
+  color: var(--accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.menu-note .ext:hover,
+.menu-note .ext:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.about-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.menu-about .menu-note {
+  margin: 0;
+}
+
+.about-mark {
+  width: 48px;
+  height: 48px;
+  display: block;
+  flex: none;
+  color: var(--accent);
+  overflow: visible;
+  shape-rendering: crispEdges;
+}
+
+.about-name {
+  margin: 0;
+  font-family: "Pet Me 64", monospace;
+  font-size: 16px;
+  line-height: 16px;
+  color: var(--accent);
+}
+
+.theme-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 4px 0 0;
+  min-height: 0;
+}
+
+.theme-btn {
+  appearance: none;
+  margin: 0;
+  padding: 6px 2px;
+  font-family: "Pet Me 64", monospace;
+  font-size: 8px;
+  line-height: 10px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-btn[data-theme="amber"] {
+  background: #000;
+  color: #ffb000;
+  border: 2px solid #ffb000;
+}
+
+.theme-btn[data-theme="green"] {
+  background: #000;
+  color: #33ff00;
+  border: 2px solid #33ff00;
+}
+
+.theme-btn[data-theme="mono"] {
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+.theme-btn[data-theme="c64"] {
+  background: #40318d;
+  color: #7869c4;
+  border: 2px solid #7869c4;
+}
+
+.theme-btn[aria-pressed="true"] {
+  outline: 2px solid currentColor;
+  outline-offset: 1px;
+}
+
+.menu-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.menu-row button,
+#quit {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #000;
+  font-family: "Pet Me 64", monospace;
+  font-size: 8px;
+  line-height: 8px;
+  padding: 6px 4px;
+  cursor: pointer;
+}
+
+#quit {
+  margin-top: 8px;
+  width: 100%;
+  flex: none;
+}
