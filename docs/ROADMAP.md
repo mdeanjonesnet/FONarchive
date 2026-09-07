@@ -2,19 +2,11 @@
 
 Not a contract. Order can slip. 1.0 means “Mac and Windows both have a download,” not “every idea is in.”
 
-## Now — 0.9.0 Mac preview
+## Now — 1.0
 
-Apple Silicon `.dmg`, signed and notarized. GATHER / ARCHIVE, four CRT themes, custom save folder, About.
+Mac Apple Silicon `.dmg` (signed and notarized) **and** Windows `.exe` (unsigned NSIS) on GitHub Releases. GATHER / ARCHIVE, four CRT themes, custom save folder, About. GitHub is `mickjayofficial/FONarch`.
 
-**This drop does not include:** Windows, 1.1 bug reports, Polar accent slider.
-
-## Next — Windows GitHub file
-
-G14 (2026-09-07): unsigned NSIS setup installed; GATHER, ARCHIVE, and custom-folder ARCHIVE all work. Put `FONarch_0.9.0_x64-setup.exe` on GitHub Releases next to the Mac DMG. Work machine later. Same product: no Python, no path quiz.
-
-## 1.0
-
-Mac Apple Silicon **and** Windows both on Releases. GitHub is `mickjayofficial/FONarch`. Optional drag-to-Applications polish is already in the 0.9 DMG. No Intel Mac (Apple is dropping Rosetta).
+**This drop does not include:** 1.1 bug reports, Polar accent slider, Authenticode, Intel Mac.
 
 ## After 1.0 — 1.1
 

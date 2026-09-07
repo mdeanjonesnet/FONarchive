@@ -37,7 +37,7 @@ If two caches match, newest `entitlements.xml`. Never ask which home folder.
 
 **Fingerprint:** `livetype` + entitlements catalog + a font bucket with real OpenType. Numeric IDs. Skip encrypted blobs and `GudeLivetype/` (SQLite).
 
-Mac folders are dotted: `.c/entitlements.xml`, `.r` / `.w` / `.t` (OpenType), `.e` (skip). Hunt/gather as of 0.9.0 only know this shape.
+Mac folders are dotted: `.c/entitlements.xml`, `.r` / `.w` / `.t` (OpenType), `.e` (skip). The 0.9.0 Mac preview only knew this shape.
 
 **Windows (confirmed 2026-09-07, Zephyrus, probe v1.2):** same known path `%APPDATA%\Adobe\CoreSync\plugins\livetype\`. Folders **drop the dot** and are Hidden: `c` (catalog), `r` / `t` (OpenType), `e` (skip), empty `w` / `u` / `x`, plus `GudeLivetype`. Catalog is `c\entitlements.xml` (`<typekitSyncState>`, child tags, **1,822** fonts / **263** families / 10 variable — same library as this Mac; `installState` 1,401 `OS` + 421 `CC`). Font files are **hidden** and **extensionless** (`r\10294`, not `.169.otf`); magic is still `OTTO`. Sample: `r` 1,382 OpenType, `t` 542 OpenType, `e` 1,820 blobs, `w`/`u`/`x` empty. `User Owned Fonts` exists and is empty. Local/ProgramData livetype do not. Hunt/gather accept both Mac dotted and Windows undotted buckets; ids may be extensionless digits. Prefer `r` over `w` over `t`. Skip `e`.
 
@@ -75,7 +75,7 @@ Copy with a read/write of the bytes (`copy_font`), not `fs::copy`. On APFS, `fs:
 
 Amber phosphor terminal. Pixel title **FONarch**. Gear (settings) top-left. Custom chrome: minimize + close top-right, plus Cmd+Q / Alt+F4. Left: GLSL wireframe landscape. Right: rolling list. Segmented LED bar. Status line. Two capsule buttons.
 
-Settings fills the glass (titlebar stays). Two columns: THEME | SAVE LOCATION + ABOUT. About: crown (tinted from `--accent`) + **FONarch**, then `VERSION 0.9.0 by Mick Jay` (link https://mdeanjones.net/), `Licensed under Apache 2.0`, `NOT affiliated with Adobe.`, `FONT: Pet Me by Kreative Software`. Dock icon is `assets/identity/FONarch-icon-withBKG.svg` (phosphor `#FFB000` on black). Gear top-left; **1.1** adds a pixel insect beside it (bug report) and Polar donate / key / accent slider in Settings. No crown-on-the-window chrome. No Ko-fi. No Intel Mac. No `fonarch.com`.
+Settings fills the glass (titlebar stays). Two columns: THEME | SAVE LOCATION + ABOUT. About: crown (tinted from `--accent`) + **FONarch**, then `VERSION 1.0.0 by Mick Jay` (link https://mdeanjones.net/), `Licensed under Apache 2.0`, `NOT affiliated with Adobe.`, `FONT: Pet Me by Kreative Software`. Dock icon is `assets/identity/FONarch-icon-withBKG.svg` (phosphor `#FFB000` on black). Gear top-left; **1.1** adds a pixel insect beside it (bug report) and Polar donate / key / accent slider in Settings. No crown-on-the-window chrome. No Ko-fi. No Intel Mac. No `fonarch.com`.
 
 ### Type
 

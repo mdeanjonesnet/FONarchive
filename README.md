@@ -25,16 +25,19 @@
 # ####              ########      ####    ####      ##########    ####              ########      ####    #### #
 #                                                                                                              #
 #                                  hidden adobe fonts. named. sorted. yours.                                   #
-#                              v0.9.0  mac / apple silicon preview  like monarch                               #
+#                              v1.0.0  mac apple silicon + windows  like monarch                               #
 #                                                                                                              #
 ################################################################################################################
 ```
 
 Tiny app. Finds Creative Cloud’s livetype cache, names the real OpenType, and either drops a folder on your Desktop or zips it. Source cache stays read-only.
 
-**Download (Mac, Apple Silicon):** [FONarch_0.9.0_aarch64.dmg](https://github.com/mickjayofficial/FONarch/releases/download/v0.9.0-mac/FONarch_0.9.0_aarch64.dmg) — signed and notarized. Open the disk image, drag FONarch to Applications.
+**1.0 is out.** Mac **and** Windows both have a download.
 
-Windows is next. This is not 1.0 until Mac **and** Windows both have a download. Intel Macs are not in this DMG.
+- **Mac (Apple Silicon):** [FONarch_1.0.0_aarch64.dmg](https://github.com/mickjayofficial/FONarch/releases/download/v1.0.0/FONarch_1.0.0_aarch64.dmg) — signed and notarized. Open the disk image, drag FONarch to Applications.
+- **Windows:** [FONarch_1.0.0_x64-setup.exe](https://github.com/mickjayofficial/FONarch/releases/download/v1.0.0/FONarch_1.0.0_x64-setup.exe) — unsigned. SmartScreen may say Windows protected your PC → **More info** → **Run anyway**.
+
+Intel Macs are not in this drop.
 
 ```text
   --[ WHY ]-------------------------------------
@@ -56,9 +59,17 @@ It is not a pirate tool. Do not redistribute Adobe’s fonts.
   --[ INSTALL ]---------------------------------
 ```
 
+**Mac**
+
 1. Download the `.dmg` (link at the top, or [Releases](https://github.com/mickjayofficial/FONarch/releases/latest)).
 2. Drag **FONarch** onto **Applications**.
 3. Open. macOS may once say it came from the internet — that’s normal.
+
+**Windows**
+
+1. Download the `.exe` (link at the top, or [Releases](https://github.com/mickjayofficial/FONarch/releases/latest)).
+2. If SmartScreen appears: **More info** → **Run anyway**.
+3. Install for this user. GATHER / ARCHIVE from the window.
 
 ```text
   --[ KEYS ]------------------------------------
@@ -70,7 +81,7 @@ It is not a pirate tool. Do not redistribute Adobe’s fonts.
 | **ARCHIVE** | same, then a `.zip` — no leftover folder |
 | **gear**    | themes, save location, About, Quit |
 
-Each button is a full run. ARCHIVE does not need GATHER first. Desktop is the default; the gear can point it elsewhere. Cmd+Q also quits.
+Each button is a full run. ARCHIVE does not need GATHER first. Desktop is the default; the gear can point it elsewhere. Cmd+Q / Alt+F4 also quits.
 
 ```text
   --[ WON'T ]-----------------------------------
@@ -82,7 +93,7 @@ Won’t write livetype. Won’t decrypt `.e` blobs. Won’t scan other users. Wo
   --[ MAP ]-------------------------------------
 ```
 
-Tentative: [docs/ROADMAP.md](docs/ROADMAP.md). 0.9.0 Mac → Windows `.exe` → 1.0. Then 1.1: GitHub bug reports (titlebar insect + status-row on failure) and Polar accent unlock. No Intel Mac, no crown-on-window, no Ko-fi, no `fonarch.com`. Python freeze is tag [`python-v1`](https://github.com/mickjayofficial/FONarch/releases/tag/python-v1) (MIT). This rewrite is Apache 2.0.
+Tentative: [docs/ROADMAP.md](docs/ROADMAP.md). **1.0** is Mac Apple Silicon + Windows. Next is 1.1: GitHub bug reports (titlebar insect + status-row on failure) and Polar accent unlock. No Intel Mac, no crown-on-window, no Ko-fi, no `fonarch.com`. Python freeze is tag [`python-v1`](https://github.com/mickjayofficial/FONarch/releases/tag/python-v1) (MIT). This rewrite is Apache 2.0.
 
 ```text
   --[ HACK ]------------------------------------
