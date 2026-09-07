@@ -17,7 +17,7 @@ Apache 2.0, not affiliated with Adobe. Personal backup of fonts already on disk 
 
 - Display / wordmark: **FONarch** (FON lockup + arch, spoken like *monarch*)
 - GitHub repo: `mickjayofficial/FONarch` (renamed from `FONarchive` 2026-09-05). Old URLs redirect.
-- `fonarch.com` is a Namecheap squat (Jul 2026, WHOIS never verified). `.app` / `.dev` / `.io` looked free as of 2026-09-01
+- `fonarch.com` is a Namecheap squat — **not a live site, not a FONarch task.** Future public home is under JMDCO (Design Factory) when that exists.
 - Future “FontBase on steroids” AI manager is a **separate** product and repo
 
 ## Stack
@@ -29,17 +29,21 @@ Not Python+PyInstaller, not Electron, not a tray/menu-bar resident. Open-and-run
 ## Hunt (current user only)
 
 1. Known paths: Mac `~/Library/Application Support/Adobe/CoreSync/plugins/livetype/`; Windows `%APPDATA%\Adobe\CoreSync\plugins\livetype\`
-2. Adobe-shaped paths under home: `**/Adobe/**/livetype/.c/entitlements.xml` with root `<typekitSyncState>`, confirm sibling `.r` has OpenType
+2. Adobe-shaped paths under home: `**/Adobe/**/livetype/` with `c` or `.c` `entitlements.xml` (root `<typekitSyncState>`), confirm sibling `r` / `.r` has OpenType
 3. Broader home search, skip junk
 4. Whole volume last resort, with a status line so it doesn’t look frozen
 
 If two caches match, newest `entitlements.xml`. Never ask which home folder.
 
-**Fingerprint:** `livetype` + `.c/entitlements.xml` + hidden `.r` / `.e` / `.w` (and `.t`). Numeric IDs.
+**Fingerprint:** `livetype` + entitlements catalog + a font bucket with real OpenType. Numeric IDs. Skip encrypted blobs and `GudeLivetype/` (SQLite).
+
+Mac folders are dotted: `.c/entitlements.xml`, `.r` / `.w` / `.t` (OpenType), `.e` (skip). Hunt/gather as of 0.9.0 only know this shape.
+
+**Windows (confirmed 2026-09-07, Zephyrus, probe v1.2):** same known path `%APPDATA%\Adobe\CoreSync\plugins\livetype\`. Folders **drop the dot** and are Hidden: `c` (catalog), `r` / `t` (OpenType), `e` (skip), empty `w` / `u` / `x`, plus `GudeLivetype`. Catalog is `c\entitlements.xml` (`<typekitSyncState>`, child tags, **1,822** fonts / **263** families / 10 variable — same library as this Mac; `installState` 1,401 `OS` + 421 `CC`). Font files are **hidden** and **extensionless** (`r\10294`, not `.169.otf`); magic is still `OTTO`. Sample: `r` 1,382 OpenType, `t` 542 OpenType, `e` 1,820 blobs, `w`/`u`/`x` empty. `User Owned Fonts` exists and is empty. Local/ProgramData livetype do not. Hunt/gather accept both Mac dotted and Windows undotted buckets; ids may be extensionless digits. Prefer `r` over `w` over `t`. Skip `e`.
 
 **This Mac (2026-09-03 GATHER):** catalog **1,822** fonts (1,382 `OS` + 440 `CC`) / **263** families, 10 variable. Real OpenType: `.r` 1,382, `.w` 381, `.t` 60 (one id in both `.r` and `.w` — prefer `.r`). Skip `.e` (1,822 encrypted blobs) and `GudeLivetype/` (SQLite). First Rust run: `~/Desktop/FONarch 2026-09-03/` (1,822 files, 270 MB, 1,344 OTF + 478 TTF). Adobe `familyName` splits are kept (Condor / CondorCond / CondorWide; Adorn Banners vs AdornS Banners).
 
-**Windows test (after Mac 0.9):** nearer candidate is Michael’s Win 11 gaming laptop if Saturday-morning Adobe CC + fonts produce a livetype cache. Work Windows machine with Adobe fonts remains a later `.exe` exercise for `%APPDATA%\Adobe\CoreSync\plugins\livetype\`. Do not block the Mac preview on either box.
+**Windows test (after Mac 0.9):** gaming laptop cache is real (2026-09-07). Work Windows machine Tuesday. Do not start 1.1 until both platform downloads exist.
 
 ## Naming fonts
 
@@ -57,7 +61,7 @@ Source of truth is XML **child tags**, not attributes:
 </font>
 ```
 
-Path is `livetype/.c/entitlements.xml` — **not** `livetype/entitlements.xml`.
+Path is `livetype/.c/entitlements.xml` on Mac, `livetype/c/entitlements.xml` on Windows — **not** `livetype/entitlements.xml`.
 
 The Python script looked in the wrong place and read attributes, so the 2025-09-19 run had **empty `xml_id` on all 1,391 rows** and guessed with fontTools. That run is a **volume check** (201 families, 1,391 fonts, ~216 MB of fonts), not a naming check.
 
@@ -71,7 +75,7 @@ Copy with a read/write of the bytes (`copy_font`), not `fs::copy`. On APFS, `fs:
 
 Amber phosphor terminal. Pixel title **FONarch**. Gear (settings) top-left. Custom chrome: minimize + close top-right, plus Cmd+Q / Alt+F4. Left: GLSL wireframe landscape. Right: rolling list. Segmented LED bar. Status line. Two capsule buttons.
 
-Settings fills the glass (titlebar stays). Two columns: THEME | SAVE LOCATION + ABOUT. About: crown (tinted from `--accent`) + **FONarch**, then `VERSION 0.9.0 by Mick Jay` (link https://mdeanjones.net/), `Licensed under Apache 2.0`, `NOT affiliated with Adobe.`, `FONT: Pet Me by Kreative Software`. Dock icon is `assets/identity/FONarch-icon-withBKG.svg` (phosphor `#FFB000` on black). Crown-on-the-window chrome is v2.
+Settings fills the glass (titlebar stays). Two columns: THEME | SAVE LOCATION + ABOUT. About: crown (tinted from `--accent`) + **FONarch**, then `VERSION 0.9.0 by Mick Jay` (link https://mdeanjones.net/), `Licensed under Apache 2.0`, `NOT affiliated with Adobe.`, `FONT: Pet Me by Kreative Software`. Dock icon is `assets/identity/FONarch-icon-withBKG.svg` (phosphor `#FFB000` on black). Gear top-left; **1.1** adds a pixel insect beside it (bug report) and Polar donate / key / accent slider in Settings. No crown-on-the-window chrome. No Ko-fi. No Intel Mac. No `fonarch.com`.
 
 ### Type
 

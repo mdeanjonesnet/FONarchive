@@ -117,6 +117,47 @@ mod tests {
     }
 
     #[test]
+    fn windows_url_sibling_still_reads_child_tags() {
+        let xml = r#"<?xml version="1.0" encoding="UTF-8"?>
+<typekitSyncState>
+  <fonts type="array">
+    <font>
+      <url>https://api.typekit.com/desktop_v2/sync/example</url>
+      <id>10294</id>
+      <properties>
+        <fullName>Proxima Nova Extrabold</fullName>
+        <familyName>Proxima Nova</familyName>
+        <variationName>Extrabold</variationName>
+        <isVariable>false</isVariable>
+      </properties>
+    </font>
+  </fonts>
+</typekitSyncState>
+"#;
+        let map = parse_entitlements_str(Path::new("win.xml"), xml).unwrap();
+        assert_eq!(map["10294"].family_name, "Proxima Nova");
+        assert_eq!(map["10294"].full_name, "Proxima Nova Extrabold");
+    }
+
+    #[test]
+    fn harvested_windows_xml_if_present() {
+        let p = Path::new(env!("CARGO_MANIFEST_DIR")).join(
+            "../../tools/windows-probe/results/2026-09-07_110016/roaming-known-c-entitlements.xml",
+        );
+        if !p.is_file() {
+            return;
+        }
+        let map = parse_entitlements(&p).unwrap();
+        assert_eq!(map.len(), 1822);
+        assert_eq!(map["169"].full_name, "Proxima Nova Extrabold");
+        assert_eq!(map["169"].family_name, "Proxima Nova");
+        let families: std::collections::BTreeSet<_> =
+            map.values().map(|m| m.family_name.as_str()).collect();
+        assert_eq!(families.len(), 263);
+        assert_eq!(map.values().filter(|m| m.is_variable).count(), 10);
+    }
+
+    #[test]
     fn rejects_other_roots() {
         let err = parse_entitlements_str(Path::new("x.xml"), "<html></html>").unwrap_err();
         assert!(matches!(err, Error::BadCatalog(_)));

@@ -14,7 +14,15 @@ use crate::hunt::{entitlements_path, find_livetype};
 use crate::names::dest_parts;
 use crate::opentype::{fallback_names, id_from_filename, magic_ext};
 
-const SOURCE_BUCKETS: &[(&str, u8)] = &[(".r", 0), (".w", 1), (".t", 2)];
+/// Prefer `r` over `w` over `t`. Mac prefixes a dot; Windows does not. Skip `e`.
+const SOURCE_BUCKETS: &[(&str, u8)] = &[
+    (".r", 0),
+    ("r", 0),
+    (".w", 1),
+    ("w", 1),
+    (".t", 2),
+    ("t", 2),
+];
 
 #[derive(Debug, Clone, Default)]
 pub struct GatherOptions {
@@ -520,6 +528,48 @@ mod tests {
         fs::write(lt.join(".w/.169.otf"), b"OTTOWWWW").unwrap();
     }
 
+    fn fixture_livetype_windows(root: &Path) {
+        let lt = root.join("livetype");
+        fs::create_dir_all(lt.join("c")).unwrap();
+        fs::create_dir_all(lt.join("r")).unwrap();
+        fs::create_dir_all(lt.join("t")).unwrap();
+        fs::create_dir_all(lt.join("e")).unwrap();
+        fs::create_dir_all(lt.join("GudeLivetype")).unwrap();
+        fs::write(
+            lt.join("c/entitlements.xml"),
+            br#"<?xml version="1.0" encoding="UTF-8"?>
+<typekitSyncState>
+  <fonts type="array">
+    <font>
+      <url>https://api.typekit.com/desktop_v2/sync/example</url>
+      <id>10294</id>
+      <properties>
+        <fullName>Proxima Nova Extrabold</fullName>
+        <familyName>Proxima Nova</familyName>
+        <variationName>Extrabold</variationName>
+        <isVariable>false</isVariable>
+      </properties>
+    </font>
+    <font>
+      <id>12046</id>
+      <properties>
+        <fullName>Minion Pro Regular</fullName>
+        <familyName>Minion Pro</familyName>
+        <variationName>Regular</variationName>
+      </properties>
+    </font>
+  </fonts>
+</typekitSyncState>
+"#,
+        )
+        .unwrap();
+        fs::write(lt.join("r/10294"), b"OTTO\0\0\0\0from-r").unwrap();
+        fs::write(lt.join("t/10294"), b"OTTO\0\0\0\0from-t").unwrap();
+        fs::write(lt.join("t/12046"), b"OTTO\0\0\0\0from-t-only").unwrap();
+        fs::write(lt.join("e/10294"), [0x9c, 0x7b, 0xd7, 0xb5, 1, 2, 3, 4]).unwrap();
+        fs::write(lt.join("GudeLivetype/99"), b"OTTO\0\0\0\0").unwrap();
+    }
+
     #[test]
     fn copies_named_ot_skips_encrypted_and_gude() {
         let dir = tempdir().unwrap();
@@ -548,6 +598,35 @@ mod tests {
         assert!(!report.output.join("working").exists());
         assert!(!report.output.join("DONE").exists());
         assert!(!report.archived);
+    }
+
+    #[test]
+    fn copies_windows_undotted_extensionless() {
+        let dir = tempdir().unwrap();
+        fixture_livetype_windows(dir.path());
+        let out = dir.path().join("desktop");
+        fs::create_dir_all(&out).unwrap();
+        let report = gather(
+            GatherOptions {
+                dest_parent: Some(out.clone()),
+                dry_run: false,
+                livetype: Some(dir.path().join("livetype")),
+            },
+            |_| {},
+        )
+        .unwrap();
+        assert_eq!(report.copied, 2);
+        assert_eq!(report.families, 2);
+        let proxima = report
+            .output
+            .join("Proxima_Nova")
+            .join("Proxima_Nova_Extrabold.otf");
+        assert_eq!(fs::read(&proxima).unwrap(), b"OTTO\0\0\0\0from-r");
+        let minion = report
+            .output
+            .join("Minion_Pro")
+            .join("Minion_Pro_Regular.otf");
+        assert_eq!(fs::read(&minion).unwrap(), b"OTTO\0\0\0\0from-t-only");
     }
 
     #[test]

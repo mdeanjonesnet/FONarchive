@@ -6,7 +6,7 @@ Not a contract. Order can slip. 1.0 means “Mac and Windows both have a downloa
 
 Apple Silicon `.dmg`, signed and notarized. GATHER / ARCHIVE, four CRT themes, custom save folder, About.
 
-**This drop does not include:** Intel Mac, Windows, in-app bug reports, crown sitting on the window, donate / custom accent slider.
+**This drop does not include:** Windows, 1.1 bug reports, Polar accent slider.
 
 ## Next — Windows
 
@@ -16,14 +16,22 @@ Do not block the Mac GitHub drop on Windows.
 
 ## 1.0
 
-Mac (Apple Silicon; Intel if we add a build) **and** Windows both on Releases. GitHub is `mickjayofficial/FONarch`. Optional drag-to-Applications polish is already in the 0.9 DMG.
+Mac Apple Silicon **and** Windows both on Releases. GitHub is `mickjayofficial/FONarch`. Optional drag-to-Applications polish is already in the 0.9 DMG. No Intel Mac (Apple is dropping Rosetta).
 
-## Later (v2-shaped, not 0.9)
+## After 1.0 — 1.1
 
-- Window wears the crown (large mark a couple of pixels off the top, toggle)
-- Custom accent / donation unlock
-- In-app bug report
-- `fonarch.com` if the squat ever becomes a real page
+Locked 2026-09-06. Do not start while Windows hunt is open.
+
+- **Bugs:** pixel insect next to the gear (generic GitHub issue, light prefill). `REPORT ERROR` on the status row only when a run actually failed (error + diagnostics prefilled). Browser form; user hits Submit. Markdown template, not a YAML issue form.
+- **Accent:** Polar pay-what-you-want (min $1, suggested $3) mints a `FONARCH_…` key. SETTINGS: DONATE + paste key. Hue slider unlocks. Four CRT themes still pick `--bg`.
+- Polar is Merchant of Record. Existing Stripe login is **payouts only** (Connect). No Stripe keys in the app. No Ko-fi. No honor-system checkbox.
+
+## Won't
+
+- Intel Mac
+- Crown sitting on the window
+- `fonarch.com` (future public home is JMDCO, not a FONarch task)
+- Ko-fi
 
 ## Not this product
 

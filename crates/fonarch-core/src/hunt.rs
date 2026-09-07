@@ -23,6 +23,7 @@ const SKIP_DIR_NAMES: &[&str] = &[
     "Photos Library.photoslibrary",
     "FontBase",
     "GudeLivetype",
+    "e",
     ".cache",
     "Movies",
     "Music",
@@ -45,11 +46,22 @@ pub fn known_livetype_path() -> Option<PathBuf> {
     Some(p)
 }
 
+const ENTITLEMENTS_DIRS: &[&str] = &[".c", "c"];
+const FONT_BUCKETS: &[&str] = &[".r", "r", ".w", "w", ".t", "t"];
+
+/// Mac: `livetype/.c/entitlements.xml`. Windows: `livetype/c/entitlements.xml`.
 pub fn entitlements_path(livetype: &Path) -> PathBuf {
+    for dir in ENTITLEMENTS_DIRS {
+        let p = livetype.join(dir).join("entitlements.xml");
+        if p.is_file() {
+            return p;
+        }
+    }
     livetype.join(".c").join("entitlements.xml")
 }
 
-/// `livetype` + `.c/entitlements.xml` + hidden `.r` / `.w` / `.t` with real OpenType.
+/// `livetype` + entitlements catalog + a font bucket with real OpenType.
+/// Mac buckets are dotted (`.r`); Windows drops the dot (`r`).
 pub fn is_livetype(path: &Path) -> bool {
     if !path.is_dir() {
         return false;
@@ -71,7 +83,7 @@ pub fn is_livetype(path: &Path) -> bool {
     if !probe.contains("<typekitSyncState") {
         return false;
     }
-    [".r", ".w", ".t"]
+    FONT_BUCKETS
         .iter()
         .any(|dir| bucket_has_opentype(&path.join(dir)))
 }
@@ -223,5 +235,43 @@ mod tests {
         let gude = dir.path().join("GudeLivetype");
         fs::create_dir_all(&gude).unwrap();
         assert!(!is_livetype(&gude));
+    }
+
+    fn write_windows_livetype(root: &Path) -> PathBuf {
+        let lt = root.join("Adobe/CoreSync/plugins/livetype");
+        fs::create_dir_all(lt.join("c")).unwrap();
+        fs::create_dir_all(lt.join("r")).unwrap();
+        fs::create_dir_all(lt.join("e")).unwrap();
+        fs::write(
+            lt.join("c/entitlements.xml"),
+            b"<?xml version=\"1.0\"?><typekitSyncState><fonts/></typekitSyncState>",
+        )
+        .unwrap();
+        fs::write(lt.join("r/10294"), b"OTTO\0\0\0\0").unwrap();
+        fs::write(lt.join("e/10294"), [0x9c, 0x7b, 0xd7, 0xb5, 0, 0, 0, 0]).unwrap();
+        lt
+    }
+
+    #[test]
+    fn fingerprint_accepts_windows_shape() {
+        let dir = tempdir().unwrap();
+        let lt = write_windows_livetype(dir.path());
+        assert!(is_livetype(&lt));
+        assert_eq!(entitlements_path(&lt), lt.join("c/entitlements.xml"));
+    }
+
+    #[test]
+    fn windows_e_only_is_not_livetype() {
+        let dir = tempdir().unwrap();
+        let lt = dir.path().join("livetype");
+        fs::create_dir_all(lt.join("c")).unwrap();
+        fs::create_dir_all(lt.join("e")).unwrap();
+        fs::write(
+            lt.join("c/entitlements.xml"),
+            b"<?xml version=\"1.0\"?><typekitSyncState><fonts/></typekitSyncState>",
+        )
+        .unwrap();
+        fs::write(lt.join("e/1"), b"OTTO\0\0\0\0").unwrap();
+        assert!(!is_livetype(&lt));
     }
 }

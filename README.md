@@ -82,7 +82,7 @@ Won’t write livetype. Won’t decrypt `.e` blobs. Won’t scan other users. Wo
   --[ MAP ]-------------------------------------
 ```
 
-Tentative: [docs/ROADMAP.md](docs/ROADMAP.md). 0.9.0 Mac → Windows `.exe` → 1.0. Later: crown-on-the-window, donate / accent, bug reports. Python freeze is tag [`python-v1`](https://github.com/mickjayofficial/FONarch/releases/tag/python-v1) (MIT). This rewrite is Apache 2.0.
+Tentative: [docs/ROADMAP.md](docs/ROADMAP.md). 0.9.0 Mac → Windows `.exe` → 1.0. Then 1.1: GitHub bug reports (titlebar insect + status-row on failure) and Polar accent unlock. No Intel Mac, no crown-on-window, no Ko-fi, no `fonarch.com`. Python freeze is tag [`python-v1`](https://github.com/mickjayofficial/FONarch/releases/tag/python-v1) (MIT). This rewrite is Apache 2.0.
 
 ```text
   --[ HACK ]------------------------------------

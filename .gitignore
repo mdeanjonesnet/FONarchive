@@ -18,5 +18,6 @@ src-tauri/gen
 .env.notarize
 *.p12
 build DMG archive/
+tools/windows-probe/results/
 
 *.dmg

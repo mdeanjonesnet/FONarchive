@@ -1,5 +1,6 @@
 //! Headless GATHER core: find Adobe livetype, name fonts from
-//! `.c/entitlements.xml` child tags, copy real OpenType to a dated Desktop folder.
+//! `.c/entitlements.xml` (Windows: `c/entitlements.xml`) child tags, copy
+//! real OpenType to a dated Desktop folder.
 
 mod catalog;
 mod error;

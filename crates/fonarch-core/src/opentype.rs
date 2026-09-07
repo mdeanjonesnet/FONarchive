@@ -85,20 +85,17 @@ fn best_name(face: &ttf_parser::Face<'_>, ids: &[u16]) -> Option<String> {
     None
 }
 
-/// Numeric livetype id from `.169.otf` or `169.otf`.
+/// Numeric livetype id from `.169.otf`, `169.otf`, or Windows `10294` (no extension).
 pub fn id_from_filename(path: &Path) -> Option<String> {
     let name = path.file_name()?.to_str()?;
-    if name.starts_with('.') && name.eq_ignore_ascii_case(".ds_store") {
+    if name.eq_ignore_ascii_case(".ds_store") {
         return None;
     }
-    let mut stem = None;
-    for ext in [".otf", ".ttf", ".OTF", ".TTF"] {
-        if let Some(stripped) = name.strip_suffix(ext) {
-            stem = Some(stripped);
-            break;
-        }
-    }
-    let id = stem?.trim_start_matches('.');
+    let stem = [".otf", ".ttf", ".OTF", ".TTF"]
+        .iter()
+        .find_map(|ext| name.strip_suffix(ext))
+        .unwrap_or(name);
+    let id = stem.trim_start_matches('.');
     if id.is_empty() || !id.chars().all(|c| c.is_ascii_digit()) {
         return None;
     }
@@ -136,7 +133,15 @@ mod tests {
             Some("169")
         );
         assert_eq!(id_from_filename(Path::new("/tmp/.DS_Store")), None);
-        assert_eq!(id_from_filename(Path::new("/tmp/.e/.169")), None);
+        assert_eq!(
+            id_from_filename(Path::new("C:/livetype/r/10294")).as_deref(),
+            Some("10294")
+        );
+        // Extensionless digits are ids. Encrypted blobs live in e/ and are skipped there.
+        assert_eq!(
+            id_from_filename(Path::new("/tmp/.e/.169")).as_deref(),
+            Some("169")
+        );
     }
 
     #[test]
