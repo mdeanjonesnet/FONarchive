@@ -43,7 +43,7 @@ Mac folders are dotted: `.c/entitlements.xml`, `.r` / `.w` / `.t` (OpenType), `.
 
 **This Mac (2026-09-03 GATHER):** catalog **1,822** fonts (1,382 `OS` + 440 `CC`) / **263** families, 10 variable. Real OpenType: `.r` 1,382, `.w` 381, `.t` 60 (one id in both `.r` and `.w` — prefer `.r`). Skip `.e` (1,822 encrypted blobs) and `GudeLivetype/` (SQLite). First Rust run: `~/Desktop/FONarch 2026-09-03/` (1,822 files, 270 MB, 1,344 OTF + 478 TTF). Adobe `familyName` splits are kept (Condor / CondorCond / CondorWide; Adorn Banners vs AdornS Banners).
 
-**Windows test (after Mac 0.9):** gaming laptop cache is real (2026-09-07). Work Windows machine Tuesday. Do not start 1.1 until both platform downloads exist.
+**Windows test (after Mac 0.9):** gaming laptop cache is real (2026-09-07). Work Windows machine Tuesday. Both platform downloads exist (`v1.0.0`). 1.1 is next in a few days.
 
 ## Naming fonts
 

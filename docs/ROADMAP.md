@@ -2,15 +2,15 @@
 
 Not a contract. Order can slip. 1.0 means “Mac and Windows both have a download,” not “every idea is in.”
 
-## Now — 1.0
+## Now — 1.0 (shipped 2026-09-07)
 
-Mac Apple Silicon `.dmg` (signed and notarized) **and** Windows `.exe` (unsigned NSIS) on GitHub Releases. GATHER / ARCHIVE, four CRT themes, custom save folder, About. GitHub is `mickjayofficial/FONarch`.
+Mac Apple Silicon `.dmg` (signed and notarized) **and** Windows `.exe` (unsigned NSIS) on GitHub Releases tag `v1.0.0`. GATHER / ARCHIVE, four CRT themes, custom save folder, About. GitHub is `mickjayofficial/FONarch`.
 
-**This drop does not include:** 1.1 bug reports, Polar accent slider, Authenticode, Intel Mac.
+**Not in 1.0:** 1.1 bug reports, Polar accent slider, Authenticode, Intel Mac.
 
-## After 1.0 — 1.1
+## Next — 1.1 (few days)
 
-Locked 2026-09-06. Do not start until both platform downloads exist.
+Locked 2026-09-06. Both platform downloads exist. Start when Michael opens a FONarch 1.1 session.
 
 - **Bugs:** pixel insect next to the gear (generic GitHub issue, light prefill). `REPORT ERROR` on the status row only when a run actually failed (error + diagnostics prefilled). Browser form; user hits Submit. Markdown template, not a YAML issue form.
 - **Accent:** Polar pay-what-you-want (min $1, suggested $3) mints a `FONARCH_…` key. SETTINGS: DONATE + paste key. Hue slider unlocks. Four CRT themes still pick `--bg`.
