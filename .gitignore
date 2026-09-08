@@ -15,9 +15,23 @@ node_modules
 dist
 src-tauri/gen
 
+# Signing / secrets
+.env
+.env.*
 .env.notarize
 *.p12
-build DMG archive/
-tools/windows-probe/results/
+*.pfx
+*.pem
+*.key
+*.p8
 
+build DMG archive/
 *.dmg
+
+# Agent handoff and machine notes — keep local, not the public tree
+AGENTS.md
+Agents.md
+docs/SESSION.md
+
+# One-off Windows livetype probe (USB harvest). App hunt lives in fonarch-core.
+tools/windows-probe/

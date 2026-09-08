@@ -20,12 +20,12 @@ Locked 2026-09-06. Both platform downloads exist. Start when Michael opens a FON
 
 - Intel Mac
 - Crown sitting on the window
-- `fonarch.com` (future public home is JMDCO, not a FONarch task)
+- `fonarch.com`
 - Ko-fi
 
 ## Not this product
 
-A “FontBase on steroids” AI font manager is a **separate** app and repo.
+FONarch stays GATHER / ARCHIVE. A full font manager is a different app.
 
 ## Python
 

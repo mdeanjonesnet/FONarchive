@@ -17,8 +17,8 @@ Apache 2.0, not affiliated with Adobe. Personal backup of fonts already on disk 
 
 - Display / wordmark: **FONarch** (FON lockup + arch, spoken like *monarch*)
 - GitHub repo: `mickjayofficial/FONarch` (renamed from `FONarchive` 2026-09-05). Old URLs redirect.
-- `fonarch.com` is a Namecheap squat — **not a live site, not a FONarch task.** Future public home is under JMDCO (Design Factory) when that exists.
-- Future “FontBase on steroids” AI manager is a **separate** product and repo
+- `fonarch.com` is **not a live site, not a FONarch task.**
+- A full font manager is a **separate** product. This app stays GATHER / ARCHIVE.
 
 ## Stack
 
@@ -39,11 +39,11 @@ If two caches match, newest `entitlements.xml`. Never ask which home folder.
 
 Mac folders are dotted: `.c/entitlements.xml`, `.r` / `.w` / `.t` (OpenType), `.e` (skip). The 0.9.0 Mac preview only knew this shape.
 
-**Windows (confirmed 2026-09-07, Zephyrus, probe v1.2):** same known path `%APPDATA%\Adobe\CoreSync\plugins\livetype\`. Folders **drop the dot** and are Hidden: `c` (catalog), `r` / `t` (OpenType), `e` (skip), empty `w` / `u` / `x`, plus `GudeLivetype`. Catalog is `c\entitlements.xml` (`<typekitSyncState>`, child tags, **1,822** fonts / **263** families / 10 variable — same library as this Mac; `installState` 1,401 `OS` + 421 `CC`). Font files are **hidden** and **extensionless** (`r\10294`, not `.169.otf`); magic is still `OTTO`. Sample: `r` 1,382 OpenType, `t` 542 OpenType, `e` 1,820 blobs, `w`/`u`/`x` empty. `User Owned Fonts` exists and is empty. Local/ProgramData livetype do not. Hunt/gather accept both Mac dotted and Windows undotted buckets; ids may be extensionless digits. Prefer `r` over `w` over `t`. Skip `e`.
+**Windows (confirmed 2026-09-07):** same known path `%APPDATA%\Adobe\CoreSync\plugins\livetype\`. Folders **drop the dot** and are Hidden: `c` (catalog), `r` / `t` (OpenType), `e` (skip), empty `w` / `u` / `x`, plus `GudeLivetype`. Catalog is `c\entitlements.xml` (`<typekitSyncState>`, child tags). Font files are **hidden** and **extensionless** (`r\10294`, not `.169.otf`); magic is still `OTTO`. Prefer `r` over `w` over `t`. Skip `e`. Hunt/gather accept both Mac dotted and Windows undotted buckets; ids may be extensionless digits. Local/ProgramData livetype copies are not the cache.
 
-**This Mac (2026-09-03 GATHER):** catalog **1,822** fonts (1,382 `OS` + 440 `CC`) / **263** families, 10 variable. Real OpenType: `.r` 1,382, `.w` 381, `.t` 60 (one id in both `.r` and `.w` — prefer `.r`). Skip `.e` (1,822 encrypted blobs) and `GudeLivetype/` (SQLite). First Rust run: `~/Desktop/FONarch 2026-09-03/` (1,822 files, 270 MB, 1,344 OTF + 478 TTF). Adobe `familyName` splits are kept (Condor / CondorCond / CondorWide; Adorn Banners vs AdornS Banners).
+**Mac (confirmed 2026-09-03):** catalog child tags under `.c/entitlements.xml`. Real OpenType in `.r` / `.w` / `.t`. Prefer `.r` when an id exists in more than one bucket. Skip `.e` (encrypted blobs) and `GudeLivetype/` (SQLite). Adobe `familyName` splits are kept (Condor / CondorCond / CondorWide; Adorn Banners vs AdornS Banners).
 
-**Windows test (after Mac 0.9):** gaming laptop cache is real (2026-09-07). Work Windows machine Tuesday. Both platform downloads exist (`v1.0.0`). 1.1 is next in a few days.
+Windows livetype layout is confirmed. Both platform downloads exist (`v1.0.0`). 1.1 is next in a few days.
 
 ## Naming fonts
 
@@ -110,8 +110,6 @@ Art direction: Envato Elements loop `assets/video/BG 02.mov` (10 s, 4K ProRes, ~
 
 - GitHub tag `python-v1`, branch `archive/python-v1`, release “Python prototype (frozen)”
 - Files: `fonarchive_manager.py`, README, LICENSE (MIT)
-- Local clone: `~/Grok/AI CODING PROJECTS/FONarchive_app`
-- Last user run: `~/Desktop/FONarchive/` from 2025-09-19 (also `FONarchive.zip` on Desktop)
 
 ## Out of scope for this app
 
